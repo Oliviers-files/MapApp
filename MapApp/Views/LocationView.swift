@@ -37,17 +37,28 @@ extension LocationView {
      
     private var header: some View {
         VStack {
-            Text(vm.selectedLocation.name + ", " + vm.selectedLocation.cityName)
+            Button {
+                vm.toggleList()
+            } label: {
+           Text(vm.selectedLocation.name + ", " + vm.selectedLocation.cityName)
                 .font(.title2)
                 .fontWeight(.black)
                 .foregroundColor(.primary)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
+                .animation(.none, value: vm.selectedLocation)
                 .overlay (alignment: .leading){
                     Image(systemName: "arrow.down")
                         .font(.title)
                         .padding()
+                    //
+                        .rotationEffect(Angle(degrees: vm.showList ? 180 : 0))
                 }
+        }
+            
+            if vm.showList {
+                LocationListView()
+            }
         }
         .background(.thinMaterial)
         .cornerRadius(10)
