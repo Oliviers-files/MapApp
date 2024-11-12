@@ -49,5 +49,6 @@ extension LocationListView {
             }
         }
         .listStyle(.plain)
+        .frame(maxHeight: .infinity)
     }
 }

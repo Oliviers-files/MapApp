@@ -16,15 +16,39 @@ struct LocationView: View {
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $vm.mapRegion)
+            Map(coordinateRegion: $vm.mapRegion,
+                annotationItems: vm.locations,
+                annotationContent: { location in
+                MapAnnotation(coordinate: location.coordinates) {
+                    LocationPinView()
+                        .scaleEffect(vm.selectedLocation == location ? 1 : 0.8)
+                        .shadow(color: Color.black.opacity(0.4), radius: 5)
+                        .onTapGesture {
+                            vm.showDetails(location: location)
+                        }
+                }
+            })
+                .ignoresSafeArea()
             
-            header
-                .padding()
-            
-            Spacer()
-            
+            VStack(spacing: -150) {
+                header
+                    .padding()
+                
+                Spacer()
+                
+                ZStack {
+                    ForEach(vm.locations) { Location in
+                        if vm.selectedLocation == Location {
+                            LocationPreView(location: Location)
+                                .shadow(color: .black.opacity(0.4),radius: 20)
+                                .padding()
+                                .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                        }
+                    }
+                }
+            }
         }
-        .ignoresSafeArea()
+        
     }
 }
 
@@ -34,27 +58,28 @@ struct LocationView: View {
 }
 
 extension LocationView {
-     
+    
     private var header: some View {
         VStack {
             Button {
                 vm.toggleList()
             } label: {
-           Text(vm.selectedLocation.name + ", " + vm.selectedLocation.cityName)
-                .font(.title2)
-                .fontWeight(.black)
-                .foregroundColor(.primary)
-                .frame(height: 55)
-                .frame(maxWidth: .infinity)
-                .animation(.none, value: vm.selectedLocation)
-                .overlay (alignment: .leading){
-                    Image(systemName: "arrow.down")
-                        .font(.title)
-                        .padding()
-                    //
-                        .rotationEffect(Angle(degrees: vm.showList ? 180 : 0))
-                }
-        }
+                Text(vm.selectedLocation.name + ", " + vm.selectedLocation.cityName)
+                    .font(.title2)
+                    .fontWeight(.black)
+                    .foregroundColor(.primary)
+                    .frame(height: 55)
+                    .frame(maxWidth: .infinity)
+                    .animation(.none, value: vm.selectedLocation)
+                    .overlay (alignment: .leading){
+                        Image(systemName: "arrow.down")
+                            .font(.title)
+                            .foregroundStyle(Color(hue: 0.55, saturation: 0.646, brightness: 0.976))
+                            .padding()
+                        //
+                            .rotationEffect(Angle(degrees: vm.showList ? 180 : 0))
+                    }
+            }
             
             if vm.showList {
                 LocationListView()
@@ -63,6 +88,6 @@ extension LocationView {
         .background(.thinMaterial)
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 15)
-        .frame(height: 700, alignment: .top)
+        .frame(height: 300, alignment: .top)
     }
 }
