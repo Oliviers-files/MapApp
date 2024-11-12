@@ -48,7 +48,9 @@ struct LocationView: View {
                 }
             }
         }
-        
+        .sheet(item: $vm.showDetailsSheet, onDismiss: nil) { location in
+            LocationDetailsView(location: location)
+        }
     }
 }
 
@@ -74,7 +76,7 @@ extension LocationView {
                     .overlay (alignment: .leading){
                         Image(systemName: "arrow.down")
                             .font(.title)
-                            .foregroundStyle(Color(hue: 0.55, saturation: 0.646, brightness: 0.976))
+                            .foregroundStyle(Color.blue)
                             .padding()
                         //
                             .rotationEffect(Angle(degrees: vm.showList ? 180 : 0))

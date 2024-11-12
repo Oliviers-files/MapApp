@@ -40,7 +40,7 @@ struct LocationPreView: View {
             
             VStack(spacing: 8) {
                 Button {
-                    
+                    vm.showDetailsSheet = location
                 } label: {
                     Text("Learn More")
                         .font(.headline)
@@ -48,7 +48,7 @@ struct LocationPreView: View {
                         
                 }
                 .buttonStyle(.borderedProminent)
-                
+                .tint(.blue)
                 
                 
                 Button {
@@ -59,6 +59,7 @@ struct LocationPreView: View {
                         .frame(width: 125, height: 35)
                 }
                 .buttonStyle(.bordered)
+                .tint(.blue)
             }
         }
         .padding()
